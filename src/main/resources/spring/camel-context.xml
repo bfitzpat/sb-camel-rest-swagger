@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
     <!-- Define a traditional camel context here -->
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-        <restConfiguration apiContextPath="/api-docs" bindingMode="json"
+        <restConfiguration apiContextPath="/api-docs" 
             component="servlet" contextPath="/rest" host="localhost" port="8080">
             <dataFormatProperty key="prettyPrint" value="true"/>
             <apiProperty key="api.version" value="0.0.1"/>
@@ -16,8 +16,8 @@
                 <to uri="direct:hello"/>
             </get>
         </rest>
-        <route id="simple-route">
-            <from id="route-timer" uri="direct:hello"/>
+        <route id="hello-route">
+            <from id="rest-hello-route" uri="direct:hello"/>
             <log id="route-log" message="Hello World"/>
             <transform id="route-transform">
                 <simple>Hello World</simple>

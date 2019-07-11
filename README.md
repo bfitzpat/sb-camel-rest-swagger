@@ -1,11 +1,10 @@
-# Spring-Boot Camel XML QuickStart
+# Spring-Boot Camel XML REST + Swagger QuickStart
 
 This example demonstrates how to configure Camel routes in Spring Boot via
-a Spring XML configuration file.
+a Spring XML configuration file that both expose a REST API and provide a
+dynamic Swagger definition.
 
 The application utilizes the Spring [`@ImportResource`](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/ImportResource.html) annotation to load a Camel Context definition via a [camel-context.xml](src/main/resources/spring/camel-context.xml) file on the classpath.
-
-IMPORTANT: This quickstart can run in 2 modes: standalone on your machine and on your Single-node OpenShift Cluster 
 
 ### Building
 
@@ -23,25 +22,31 @@ Build the project:
     mvn clean package
     mvn spring-boot:run 
 
-### Running the Quickstart on a Single-node OpenShift Cluster
+### Testing Available APIs
 
-All commands below requires one of these:
-- be logged in to the targeted OpenShift instance (using oc login command line tool for instance)
-- configure properties to specify to which OpenShift instance it should connect
+To access the Swagger doc, use the following URL: [`http://localhost:8080/camel/api-docs`](http://localhost:8080/camel/api-docs)
 
-If you have a single-node OpenShift cluster, such as Minishift or the Red Hat Container Development Kit, [installed and running](http://appdev.openshift.io/docs/minishift-installation.html), you can also deploy your quickstart there. A single-node OpenShift cluster provides you with access to a cloud environment that is similar to a production environment.
+    {
+      "swagger" : "2.0",
+      "info" : {
+        "version" : "0.0.1",
+        "title" : "User API"
+      },
+      "host" : "localhost:8080",
+      "basePath" : "/rest",
+      "schemes" : [ "http" ],
+      "paths" : {
+        "/hello" : {
+          "get" : {
+            "operationId" : "rest-45b202aa-6ea8-4160-9cab-d6f26cf43baa",
+            "responses" : {
+              "200" : { }
+            }
+          }
+        }
+      }
+    }
 
-To deploy your booster to a running single-node OpenShift cluster:
+To access the "Hello" REST GET operation, use the following URL: [`http://localhost:8080/camel/hello`](http://localhost:8080/camel/hello)
 
-Log in and create your project:
-
-    oc login -u developer -p developer
-    oc new-project MY_PROJECT_NAME
-
-Import base images in your newly created project (MY_PROJECT_NAME):
-
-    oc import-image fis-java-openshift:2.0 --from=registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0 --confirm
-
-Unzip, build and deploy your booster:
-
-    mvn clean -DskipTests fabric8:deploy -Popenshift -Dfabric8.generator.fromMode=istag -Dfabric8.generator.from=MY_PROJECT_NAME/fis-java-openshift:2.0
+You can also use the 'curl' command: `curl -X GET http://localhost:8080/camel/hello`
