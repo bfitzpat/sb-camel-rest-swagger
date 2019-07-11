@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!-- Define a traditional camel context here -->
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <restConfiguration apiContextPath="/api-docs" bindingMode="json"
+            component="servlet" contextPath="/rest" host="localhost" port="8080">
+            <dataFormatProperty key="prettyPrint" value="true"/>
+            <apiProperty key="api.version" value="0.0.1"/>
+            <apiProperty key="api.title" value="User API"/>
+            <apiProperty key="cors" value="true"/>
+        </restConfiguration>
+        <rest id="rest-45b202aa-6ea8-4160-9cab-d6f26cf43baa">
+            <get id="01594a04-4683-41f8-b018-bae14df4c981" uri="/hello">
+                <to uri="direct:hello"/>
+            </get>
+        </rest>
+        <route id="simple-route">
+            <from id="route-timer" uri="direct:hello"/>
+            <log id="route-log" message="Hello World"/>
+            <transform id="route-transform">
+                <simple>Hello World</simple>
+            </transform>
+        </route>
+    </camelContext>
+</beans>
