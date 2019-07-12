@@ -26,27 +26,8 @@ Build the project:
 
 To access the Swagger doc, use the following URL: [`http://localhost:8080/camel/api-docs`](http://localhost:8080/camel/api-docs)
 
-    {
-      "swagger" : "2.0",
-      "info" : {
-        "version" : "0.0.1",
-        "title" : "User API"
-      },
-      "host" : "localhost:8080",
-      "basePath" : "/rest",
-      "schemes" : [ "http" ],
-      "paths" : {
-        "/hello" : {
-          "get" : {
-            "operationId" : "rest-45b202aa-6ea8-4160-9cab-d6f26cf43baa",
-            "responses" : {
-              "200" : { }
-            }
-          }
-        }
-      }
-    }
+To access the "Hello" REST GET operation, use the following URL: [`http://localhost:8080/camel/hello/{NAME}`](http://localhost:8080/camel/hello/NAME)
 
-To access the "Hello" REST GET operation, use the following URL: [`http://localhost:8080/camel/hello`](http://localhost:8080/camel/hello)
+You can also use the 'curl' command: `curl -X GET http://localhost:8080/camel/hello/{NAME}`
 
-You can also use the 'curl' command: `curl -X GET http://localhost:8080/camel/hello`
+Replace `{NAME}` with the name you want output. For example: `http://localhost:8080/camel/hello/BOB` should output "Hello BOB!"
