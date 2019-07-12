@@ -2,25 +2,38 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:camel="http://camel.apache.org/schema/spring"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-    <!-- Define a traditional camel context here -->
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-        <restConfiguration apiContextPath="/api-docs" 
-            component="servlet" contextPath="/rest" host="localhost" port="8080">
-            <dataFormatProperty key="prettyPrint" value="true"/>
+        <!-- Define the root REST configuration here -->
+        <!--  Root context path puts all operations under http://localhost:8080/camel -->
+        <!--  Swagger doc available at http://localhost:8080/camel/api-docs -->
+        <restConfiguration apiContextPath="/api-docs"
+            component="servlet" contextPath="/camel" host="localhost" port="8080">
             <apiProperty key="api.version" value="0.0.1"/>
-            <apiProperty key="api.title" value="User API"/>
+            <apiProperty key="api.title" value="Camel REST Greetings Example API"/>
             <apiProperty key="cors" value="true"/>
         </restConfiguration>
+        <!--  All rest operations collected under a REST element -->
         <rest id="rest-45b202aa-6ea8-4160-9cab-d6f26cf43baa">
-            <get id="01594a04-4683-41f8-b018-bae14df4c981" uri="/hello">
+            <!-- GET operation available at http://localhost:8080/camel/hello/{name} -->
+            <!--  pass in a "NAME" as the final part of the URL and you get "Hello NAME!" from the associated Camel route -->
+            <get consumes="text/plain"
+                id="01594a04-4683-41f8-b018-bae14df4c981"
+                produces="text/plain" uri="/hello/{name}">
+                <!-- Document the operation so the description appears in the Swagger doc -->
+                <description>Greet the user with the name passed in</description>
+                <!-- Document the parameter so the parameter description appears in the Swagger doc -->
+                <param dataType="string"
+                    description="The name of the user to greet"
+                    name="name" type="header"/>
                 <to uri="direct:hello"/>
             </get>
         </rest>
+        <!-- When the GET operation is called, it routes to this route, which takes the input and outputs a message in the log as well as returning the output to the user -->
         <route id="hello-route">
             <from id="rest-hello-route" uri="direct:hello"/>
-            <log id="route-log" message="Hello World"/>
+            <log id="route-log" message="Hello ${header.name}!"/>
             <transform id="route-transform">
-                <simple>Hello World</simple>
+                <simple>Hello ${header.name}!</simple>
             </transform>
         </route>
     </camelContext>
